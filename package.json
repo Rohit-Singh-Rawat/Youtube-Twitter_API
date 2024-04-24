@@ -1,0 +1,31 @@
+{
+	"name": "yt-x_api",
+	"version": "1.0.0",
+	"description": "Apis for Youtube+Twitter App",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "ts-node src/server.ts",
+		"build": "tsc",
+		"dev": "nodemon src/server.ts"
+	},
+	"keywords": [
+		"Server"
+	],
+	"author": "Rohit Singh Rawat",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/cors": "^2.8.17",
+		"@types/express": "^4.17.21",
+		"@types/node": "^20.12.7",
+		"nodemon": "^3.1.0",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"mongoose": "^8.3.2"
+	}
+}
