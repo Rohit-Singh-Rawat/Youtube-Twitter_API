@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "ts-node src/server.ts",
+		"start": "ts-node src/index.ts",
 		"build": "tsc",
-		"dev": "nodemon src/server.ts"
+		"dev": "nodemon src/index.ts"
 	},
 	"keywords": [
 		"Server"
