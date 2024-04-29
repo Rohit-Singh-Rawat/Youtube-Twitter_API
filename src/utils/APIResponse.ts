@@ -1,17 +1,17 @@
-interface APIResponseType {
+interface ApiResponseType {
 	statusCode: number;
 	message: string;
 	data: any;
 	success: boolean;
 }
 
-class APIResponse implements APIResponseType {
+export default class ApiResponse implements ApiResponseType {
 	statusCode: number;
 	message: string;
 	success: boolean;
 	data: any;
 
-	constructor(statusCode: number, message: string = 'Success', data: any) {
+	constructor(statusCode: number, data: any, message: string = 'Success') {
 		this.data = data;
 		this.statusCode = statusCode;
 		this.message = message;

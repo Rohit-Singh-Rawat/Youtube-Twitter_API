@@ -1,4 +1,4 @@
-interface APIErrorType {
+interface ApiErrorType {
 	statusCode: number;
 	errors: any[];
 	message: string;
@@ -7,7 +7,7 @@ interface APIErrorType {
 	stack?: string;
 }
 
-class APIError extends Error implements APIErrorType {
+export default class ApiError extends Error implements ApiErrorType {
 	statusCode: number;
 	errors: any[];
 	success: boolean;
@@ -25,7 +25,7 @@ class APIError extends Error implements APIErrorType {
 		this.message = message;
 		this.errors = errors;
 		this.data = null;
-		this.success =false
+		this.success = false;
 
 		if (stack) {
 			this.stack = stack;
