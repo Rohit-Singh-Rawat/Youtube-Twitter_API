@@ -1,15 +1,8 @@
 import mongoose from 'mongoose';
 import jwt, { Secret } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-interface UserDocument extends mongoose.Document {
-	username: string;
-	email: string;
-	fullName: string;
-	avatar: string;
-	coverImage: string;
-	watchHistory: mongoose.Schema.Types.ObjectId[];
-	password: string;
-	refreshToken: string;
+import UserType from '../types/user.type';
+export interface UserDocument extends UserType, mongoose.Document {
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -66,11 +59,11 @@ userSchema.pre('save', async function (next) {
 	return next();
 });
 
-userSchema.methods.comparePassword = async function(userPassword: string)  {
+userSchema.methods.comparePassword = async function (userPassword: string) {
 	return await bcrypt.compare(userPassword, this.password);
 };
 
-userSchema.methods.generateAccessToken =  function(){
+userSchema.methods.generateAccessToken = function () {
 	return jwt.sign(
 		{
 			_id: this._id,
@@ -83,7 +76,7 @@ userSchema.methods.generateAccessToken =  function(){
 			expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
 		}
 	);
-}
+};
 userSchema.methods.generateRefreshToken = function () {
 	return jwt.sign(
 		{
