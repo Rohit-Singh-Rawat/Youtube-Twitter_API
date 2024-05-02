@@ -14,3 +14,19 @@ export const UserLoginSchema = zod.object({
 	]),
 	password: zod.string().min(8),
 });
+
+export const ChangePasswordSchema = zod.object({
+	oldPassword: zod.string().min(8),
+	newPassword: zod.string().min(8),
+});
+
+export const ChangeUserDetailSchema = zod
+	.object({
+		email: zod.string().email().optional(),
+		fullName: zod.string().max(50).optional(),
+	})
+	.refine((data) => {
+		if (data.email === undefined && data.fullName === undefined) {
+			return false;
+		}
+	});

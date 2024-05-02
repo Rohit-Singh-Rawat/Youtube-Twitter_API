@@ -1,11 +1,16 @@
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import User, { UserDocument } from './../models/user.model';
 
-import { UserLoginSchema, UserRegisterSchema } from '../schemas/user.schemas';
+import {
+	ChangePasswordSchema,
+	ChangeUserDetailSchema,
+	UserLoginSchema,
+	UserRegisterSchema,
+} from '../schemas/user.schemas';
 import ApiError from '../utils/APIError';
 import ApiResponse from '../utils/APIResponse';
 import { asyncHandler } from '../utils/asyncHandler';
-import uploadOnCloudinary from '../utils/cloudinary';
+import { deleteFromCloudinary, uploadOnCloudinary } from '../utils/cloudinary';
 import UserType from '../types/user.type';
 import mongoose from 'mongoose';
 
@@ -130,7 +135,7 @@ export const LoginUser = asyncHandler(async (req, res) => {
 	const loggedInUser = await User.findById(user._id).select(
 		'-password -refreshToken'
 	);
-	res
+	return res
 		.status(200)
 		.cookie('accessToken', accessToken, options)
 		.cookie('refreshToken', 'accessToken', options)
@@ -153,7 +158,7 @@ export const logOut = asyncHandler(async (req, res) => {
 		{ new: true }
 	);
 
-	res
+	return res
 		.status(200)
 		.clearCookie('accessToken', options)
 		.clearCookie('refreshToken', options)
@@ -185,7 +190,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 		const { refreshToken, accessToken } =
 			await generateAccessTokenAndRefreshToken(user._id);
-		res
+		return res
 			.status(200)
 			.cookie('accessToken', accessToken, options)
 			.cookie('refreshToken', 'accessToken', options)
@@ -202,4 +207,108 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 			(error as Error)?.message || 'Invalid Access Token'
 		);
 	}
+});
+
+export const changeCurrentPassword = asyncHandler(async (req, res) => {
+	const { success } = ChangePasswordSchema.safeParse(req.body);
+	if (!success) {
+		throw new ApiError(401, 'Invalid Passwords');
+	}
+	const user = (await User.findById(req.user._id)) as UserDocument;
+
+	const validatePassword = user?.comparePassword(req.body.oldPassword);
+	if (!validatePassword) {
+		throw new ApiError(401, 'Invalid old password');
+	}
+	user.password = req.body.newPassword;
+	await user?.save();
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, {}, 'Password changed successfully'));
+});
+
+export const getCurrentUser = asyncHandler(async (req, res) => {
+	return res
+		.status(200)
+		.json(new ApiResponse(200, req.user, 'User fetched Successfully'));
+});
+
+const UpdateAccountDetails = asyncHandler(async (req, res) => {
+	const { success } = ChangeUserDetailSchema.safeParse(req.body);
+
+	if (!success) {
+		throw new ApiError(400, 'Invalid Fields');
+	}
+	const { fullName, email }: Pick<UserType, 'email' | 'fullName'> = req.body;
+
+	const updateFields = {
+		...(fullName !== undefined && { fullName }),
+		...(email !== undefined && { email }),
+	};
+
+	const user = await User.findByIdAndUpdate(
+		req.user?._id,
+		{
+			$set: updateFields,
+		},
+		{ new: true }
+	).select('-password -refreshToken');
+
+	res
+		.status(200)
+		.json(new ApiResponse(200, user, 'Account details updated successfully'));
+});
+
+const updateUserAvatar = asyncHandler(async (req, res) => {
+	const avatarLocalPath = req.file?.path;
+
+	if (!avatarLocalPath) {
+		throw new ApiError(400, 'Avatar file is missing');
+	}
+
+	const deletedResource = await deleteFromCloudinary(req.user.avatar);
+	const avatar = await uploadOnCloudinary(avatarLocalPath);
+	if (!avatar?.url) {
+		throw new ApiError(400, 'Error while uploading new avatar');
+	}
+	const user = await User.findByIdAndUpdate(
+		req.user?._id,
+		{
+			$set: {
+				avatar: avatar?.url,
+			},
+		},
+		{ new: true }
+	).select('-password -refreshToken');
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, user, 'Avatar image updated successfully'));
+});
+const updateCoverImage = asyncHandler(async (req, res) => {
+	const coverImageLocalPath = req.file?.path;
+
+	if (!coverImageLocalPath) {
+		throw new ApiError(400, 'cover Image file is missing');
+	}
+
+	const deletedResource = await deleteFromCloudinary(req.user.coverImage);
+	const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+	if (!coverImage?.url) {
+		throw new ApiError(400, 'Error while uploading new coverImage');
+	}
+	const user = await User.findByIdAndUpdate(
+		req.user?._id,
+		{
+			$set: {
+				coverImage: coverImage?.url,
+			},
+		},
+		{ new: true }
+	).select('-password -refreshToken');
+
+	return res
+		.status(200)
+		.json(new ApiResponse(200, user, 'cover Image updated successfully'));
 });

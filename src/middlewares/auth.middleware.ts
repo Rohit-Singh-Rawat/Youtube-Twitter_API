@@ -9,7 +9,10 @@ import express, { NextFunction } from 'express';
 declare global {
 	namespace Express {
 		interface Request {
-			user?: any;
+			user: Omit<
+				UserType & { _id: mongoose.ObjectId },
+				'password' | 'refreshToken'
+			>;
 		}
 	}
 }
