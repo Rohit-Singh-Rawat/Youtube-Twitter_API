@@ -6,3 +6,11 @@ export const UserRegisterSchema = zod.object({
 	fullName: zod.string().max(50),
 	password: zod.string().min(8),
 });
+
+export const UserLoginSchema = zod.object({
+	loginIdentity: zod.union([
+		zod.string().max(20).toLowerCase(),
+		zod.string().email(),
+	]),
+	password: zod.string().min(8),
+});

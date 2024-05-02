@@ -3,6 +3,9 @@ import jwt, { Secret } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import UserType from '../types/user.type';
 export interface UserDocument extends UserType, mongoose.Document {
+	comparePassword: (userPassword: string) => Promise<boolean>;
+	generateAccessToken: () => string;
+	generateRefreshToken: () => string;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -23,6 +26,7 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema(
 			unique: true,
 			lowercase: true,
 			trim: true,
+			match: /^\S+@\S+\.\S+$/,
 		},
 		fullName: {
 			type: String,
@@ -41,6 +45,7 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema(
 		password: {
 			type: String,
 			required: [true, 'password is required'],
+			minlength: 8,
 		},
 		refreshToken: {
 			type: String,
