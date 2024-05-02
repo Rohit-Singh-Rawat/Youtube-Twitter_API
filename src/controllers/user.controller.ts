@@ -1,3 +1,4 @@
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import User, { UserDocument } from './../models/user.model';
 
 import { UserLoginSchema, UserRegisterSchema } from '../schemas/user.schemas';
@@ -140,4 +141,65 @@ export const LoginUser = asyncHandler(async (req, res) => {
 				'User logged In Successfully'
 			)
 		);
+});
+export const logOut = asyncHandler(async (req, res) => {
+	await User.findByIdAndUpdate(
+		req.user._id,
+		{
+			$unset: {
+				refreshToken: 1,
+			},
+		},
+		{ new: true }
+	);
+
+	res
+		.status(200)
+		.clearCookie('accessToken', options)
+		.clearCookie('refreshToken', options)
+		.json(new ApiResponse(200, {}, 'User logged Out successfully'));
+});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+	const incomingRefreshToken =
+		req.cookies.refreshToken || req.body.refreshToken;
+	if (!incomingRefreshToken) {
+		throw new ApiError(401, 'Invalid Refresh Token');
+	}
+	try {
+		const decodedToken = jwt.verify(
+			incomingRefreshToken,
+			process.env.REFRESH_TOKEN_SECRET as Secret
+		) as JwtPayload;
+		if (!decodedToken?._id || !mongoose.isValidObjectId(decodedToken?._id)) {
+			throw new ApiError(401, 'Invalid access Token');
+		}
+
+		const user = await User.findById(decodedToken._id);
+		if (!user) {
+			throw new ApiError(401, 'Invalid access Token');
+		}
+		if (!(user.refreshToken === incomingRefreshToken)) {
+			throw new ApiError(401, 'Refresh token is expired or used');
+		}
+
+		const { refreshToken, accessToken } =
+			await generateAccessTokenAndRefreshToken(user._id);
+		res
+			.status(200)
+			.cookie('accessToken', accessToken, options)
+			.cookie('refreshToken', 'accessToken', options)
+			.json(
+				new ApiResponse(
+					200,
+					{ accessToken, refreshToken },
+					'Access Token refreshed'
+				)
+			);
+	} catch (error) {
+		throw new ApiError(
+			401,
+			(error as Error)?.message || 'Invalid Access Token'
+		);
+	}
 });
