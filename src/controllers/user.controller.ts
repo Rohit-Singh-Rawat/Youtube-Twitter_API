@@ -166,7 +166,7 @@ export const logOut = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, {}, 'User logged Out successfully'));
 });
 
-const refreshAccessToken = asyncHandler(async (req, res) => {
+export const refreshAccessToken = asyncHandler(async (req, res) => {
 	const incomingRefreshToken =
 		req.cookies.refreshToken || req.body.refreshToken;
 	if (!incomingRefreshToken) {
@@ -235,7 +235,7 @@ export const getCurrentUser = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, req.user, 'User fetched Successfully'));
 });
 
-const UpdateAccountDetails = asyncHandler(async (req, res) => {
+export const UpdateAccountDetails = asyncHandler(async (req, res) => {
 	const { success } = ChangeUserDetailSchema.safeParse(req.body);
 
 	if (!success) {
@@ -261,7 +261,7 @@ const UpdateAccountDetails = asyncHandler(async (req, res) => {
 		.json(new ApiResponse(200, user, 'Account details updated successfully'));
 });
 
-const updateUserAvatar = asyncHandler(async (req, res) => {
+export const updateUserAvatar = asyncHandler(async (req, res) => {
 	const avatarLocalPath = req.file?.path;
 
 	if (!avatarLocalPath) {
@@ -287,7 +287,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 		.status(200)
 		.json(new ApiResponse(200, user, 'Avatar image updated successfully'));
 });
-const updateCoverImage = asyncHandler(async (req, res) => {
+export const updateCoverImage = asyncHandler(async (req, res) => {
 	const coverImageLocalPath = req.file?.path;
 
 	if (!coverImageLocalPath) {
