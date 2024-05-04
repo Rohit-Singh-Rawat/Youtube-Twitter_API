@@ -17,6 +17,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
 	if (!video) {
 		throw new ApiError(404, 'Video not found');
 	}
+    
 	const likedAlready = await Like.findOne({
 		likedBy: req.user._id,
 		video: videoId,
@@ -123,15 +124,13 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 	const likedVideos = await Like.aggregate([
 		{
 			$match: {
-				likedBy: req.user._id,
+				likedBy: req.user?._id,
 				video: { $exists: true },
-				$and: [
-					{
-						$or: [{ comment: { $exists: false } }, { comment: null }],
-					},
-					{
-						$or: [{ tweet: { $exists: false } }, { tweet: null }],
-					},
+				$or: [
+					{ tweet: { $exists: false } },
+					{ tweet: null },
+					{ comment: { $exists: false } },
+					{ comment: null },
 				],
 			},
 		},
@@ -158,6 +157,9 @@ const getLikedVideos = asyncHandler(async (req, res) => {
 								},
 							],
 						},
+					},
+					{
+						$unwind: '$owner',
 					},
 				],
 			},

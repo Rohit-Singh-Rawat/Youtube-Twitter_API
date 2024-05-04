@@ -177,7 +177,7 @@ const deleteComment = asyncHandler(async (req, res) => {
 	if (!mongoose.isValidObjectId(commentId)) {
 		throw new ApiError(400, 'Invalid commentId');
 	}
-	
+
 	const comment = await Comment.findById(commentId);
 
 	if (!comment) {
