@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, { AggregatePaginateModel } from 'mongoose';
 import CommentType from '../types/comment.type';
+import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 export interface CommentDocument extends mongoose.Document, CommentType {
 	createdAt: Date;
@@ -25,7 +26,11 @@ const CommentSchema: mongoose.Schema<CommentDocument> = new mongoose.Schema(
 		timestamps: true,
 	}
 );
-const Comment: mongoose.Model<CommentDocument> =
-	mongoose.model<CommentDocument>('Comment', CommentSchema);
+CommentSchema.plugin(mongooseAggregatePaginate);
+
+const Comment: AggregatePaginateModel<CommentDocument> = mongoose.model<
+	CommentDocument,
+	AggregatePaginateModel<CommentDocument>
+>('Comment', CommentSchema);
 
 export default Comment;
