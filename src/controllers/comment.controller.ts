@@ -1,17 +1,22 @@
 import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import mongoose, { AggregatePaginateResult } from 'mongoose';
-import { asyncHandler } from '../utils/asyncHandler.js';
-import Video from '../models/video.model.js';
-import ApiError from '../utils/APIError.js';
-import Comment from '../models/comment.model.js';
-import ApiResponse from '../utils/APIResponse.js';
-import { AddCommentSchema } from '../schemas/comment.schemas.js';
-import Like from '../models/like.model.js';
+import { asyncHandler } from '../utils/asyncHandler';
+import Video from '../models/video.model';
+import ApiError from '../utils/APIError';
+import Comment from '../models/comment.model';
+import ApiResponse from '../utils/APIResponse';
+import {
+	AddCommentSchema,
+	UpdateCommentSchema,
+} from '../schemas/comment.schemas';
+import Like from '../models/like.model';
 
 const getVideoComments = asyncHandler(async (req, res) => {
 	const { videoId } = req.params;
 	const { page = 1, limit = 20 } = req.query;
-
+	if (!mongoose.isValidObjectId(videoId)) {
+		throw new ApiError(400, 'Invalid videoId');
+	}
 	const video = await Video.findById(videoId);
 	if (!video) {
 		throw new ApiError(404, 'Video not found');
@@ -98,8 +103,10 @@ const getVideoComments = asyncHandler(async (req, res) => {
 });
 const addComment = asyncHandler(async (req, res) => {
 	const { videoId } = req.params;
-	const { success } = AddCommentSchema.safeParse(req.body);
-
+	const { success } = UpdateCommentSchema.safeParse(req.body);
+	if (!mongoose.isValidObjectId(videoId)) {
+		throw new ApiError(400, 'Invalid videoId');
+	}
 	if (!success) {
 		throw new ApiError(400, 'Content is required');
 	}
@@ -127,6 +134,9 @@ const updateComment = asyncHandler(async (req, res) => {
 	const { commentId } = req.params;
 	const { success } = AddCommentSchema.safeParse(req.body);
 
+	if (!mongoose.isValidObjectId(commentId)) {
+		throw new ApiError(400, 'Invalid commentId');
+	}
 	if (!success) {
 		throw new ApiError(400, 'Content is required');
 	}
@@ -163,11 +173,11 @@ const updateComment = asyncHandler(async (req, res) => {
 
 const deleteComment = asyncHandler(async (req, res) => {
 	const { commentId } = req.params;
-	const { success } = AddCommentSchema.safeParse(req.body);
 
-	if (!success) {
-		throw new ApiError(400, 'Content is required');
+	if (!mongoose.isValidObjectId(commentId)) {
+		throw new ApiError(400, 'Invalid commentId');
 	}
+	
 	const comment = await Comment.findById(commentId);
 
 	if (!comment) {
