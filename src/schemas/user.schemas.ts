@@ -30,3 +30,7 @@ export const ChangeUserDetailSchema = zod
 			return false;
 		}
 	});
+
+export const GetChannelDetailSchema = zod.object({
+	username: zod.string().trim().min(1).max(20).toLowerCase(),
+});
