@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { AggregatePaginateModel } from 'mongoose';
 import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 import VideoType from '../types/video.type';
 
@@ -50,11 +50,24 @@ const videoSchema: mongoose.Schema<VideoDocument> = new mongoose.Schema(
 	}
 );
 
+videoSchema.index(
+	{ title: 'text', description: 'text' },
+	{
+		weights: {
+			title: 3,
+			description: 2,
+		},
+		name: 'search-videos',
+		default_language: 'english',
+		background: true,
+	}
+);
+
 videoSchema.plugin(mongooseAggregatePaginate);
 
-const Video: mongoose.Model<VideoDocument> = mongoose.model<VideoDocument>(
-	'Video',
-	videoSchema
-);
+const Video: AggregatePaginateModel<VideoDocument> = mongoose.model<
+	VideoDocument,
+	AggregatePaginateModel<VideoDocument>
+>('Video', videoSchema);
 
 export default Video;
