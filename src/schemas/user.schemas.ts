@@ -9,8 +9,8 @@ export const UserRegisterSchema = zod.object({
 
 export const UserLoginSchema = zod.object({
 	loginIdentity: zod.union([
-		zod.string().max(20).toLowerCase(),
-		zod.string().email(),
+		 zod.string().max(20).toLowerCase(),
+		 zod.string().email(),
 	]),
 	password: zod.string().min(8),
 });
@@ -29,6 +29,7 @@ export const ChangeUserDetailSchema = zod
 		if (data.email === undefined && data.fullName === undefined) {
 			return false;
 		}
+		return true;
 	});
 
 export const GetChannelDetailSchema = zod.object({

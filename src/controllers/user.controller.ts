@@ -47,6 +47,7 @@ export const generateAccessTokenAndRefreshToken = async (
 };
 
 export const registerUser = asyncHandler(async (req, res) => {
+	
 	const { success } = UserRegisterSchema.safeParse(req.body);
 
 	if (!success) {
@@ -104,6 +105,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 	return res
 		.status(201)
 		.json(new ApiResponse(200, createdUser, 'User registered Successfully'));
+
 });
 
 export const LoginUser = asyncHandler(async (req, res) => {
@@ -151,7 +153,7 @@ export const LoginUser = asyncHandler(async (req, res) => {
 	return res
 		.status(200)
 		.cookie('accessToken', accessToken, options)
-		.cookie('refreshToken', 'accessToken', options)
+		.cookie('refreshToken', refreshToken, options)
 		.json(
 			new ApiResponse(
 				200,
@@ -215,7 +217,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 			{ $pull: { refreshToken: incomingRefreshToken } }
 		).exec();
 
-		const { refreshToken, accessToken } =
+		const { accessToken, refreshToken } =
 			await generateAccessTokenAndRefreshToken(user._id);
 		return res
 			.status(200)
@@ -317,6 +319,7 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
 		},
 		{ new: true }
 	).select('-password -refreshToken');
+	console.log(req.user.avatar, user?.avatar)
 
 	const deletedResource = await deleteFromCloudinary(req.user.avatar);
 
