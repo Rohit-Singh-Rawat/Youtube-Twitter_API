@@ -29,11 +29,7 @@ const deleteFromCloudinary = async (publicUrl: string) => {
 		if (!publicUrl) return null;
 
 		const publicId = extractPublicId(publicUrl);
-		console.log(publicId)
-		const response = await cloudinary.uploader.destroy(publicId, {
-			resource_type: 'auto',
-		});
-		console.log(response);
+		const response = await cloudinary.uploader.destroy(publicId);
 		return response;
 	} catch (error) {
 		throw new ApiError(400, 'Error while deleting resource from cloudinary');
