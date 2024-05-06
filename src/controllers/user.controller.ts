@@ -31,7 +31,7 @@ export const generateAccessTokenAndRefreshToken = async (
 		if (!user) throw new ApiError(400, 'user not found');
 		const accessToken = user?.generateAccessToken();
 		const refreshToken = user?.generateRefreshToken();
-		user.refreshToken = refreshToken;
+		user.refreshToken.push(refreshToken);
 		await user.save({ validateBeforeSave: false });
 
 		return {
@@ -108,6 +108,8 @@ export const registerUser = asyncHandler(async (req, res) => {
 
 export const LoginUser = asyncHandler(async (req, res) => {
 	const { success } = UserLoginSchema.safeParse(req.body);
+	const incomingRefreshToken =
+		req.cookies?.refreshToken || req.body?.refreshToken;
 
 	if (!success) {
 		throw new ApiError(400, 'Wrong User Credentials');
@@ -131,6 +133,16 @@ export const LoginUser = asyncHandler(async (req, res) => {
 	if (!validatePassword) {
 		throw new ApiError(400, 'Invalid user credentials');
 	}
+
+	if (
+		incomingRefreshToken &&
+		user.refreshToken.includes(incomingRefreshToken)
+	) {
+		await User.updateOne(
+			{ _id: user._id },
+			{ $pull: { refreshToken: incomingRefreshToken } }
+		).exec();
+	}
 	const { accessToken, refreshToken } =
 		await generateAccessTokenAndRefreshToken(user._id);
 	const loggedInUser = await User.findById(user._id).select(
@@ -149,12 +161,12 @@ export const LoginUser = asyncHandler(async (req, res) => {
 		);
 });
 export const logOut = asyncHandler(async (req, res) => {
+	const incomingRefreshToken =
+		req.cookies.refreshToken || req.body.refreshToken;
 	await User.findByIdAndUpdate(
 		req.user._id,
 		{
-			$unset: {
-				refreshToken: 1,
-			},
+			$pull: { refreshToken: incomingRefreshToken },
 		},
 		{ new: true }
 	);
@@ -185,16 +197,30 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 		if (!user) {
 			throw new ApiError(401, 'Invalid access Token');
 		}
-		if (!(user.refreshToken === incomingRefreshToken)) {
+		if (!user.refreshToken.includes(incomingRefreshToken)) {
+			res
+				.clearCookie('accessToken', options)
+				.clearCookie('refreshToken', options);
+
+			const deleteToken = await User.findByIdAndUpdate(decodedToken._id, {
+				$set: {
+					refreshToken: [],
+				},
+			});
+
 			throw new ApiError(401, 'Refresh token is expired or used');
 		}
+		await User.updateOne(
+			{ _id: decodedToken._id },
+			{ $pull: { refreshToken: incomingRefreshToken } }
+		).exec();
 
 		const { refreshToken, accessToken } =
 			await generateAccessTokenAndRefreshToken(user._id);
 		return res
 			.status(200)
 			.cookie('accessToken', accessToken, options)
-			.cookie('refreshToken', 'accessToken', options)
+			.cookie('refreshToken', refreshToken, options)
 			.json(
 				new ApiResponse(
 					200,
@@ -203,6 +229,15 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 				)
 			);
 	} catch (error) {
+		if (error instanceof jwt.TokenExpiredError) {
+			const decodedToken = jwt.decode(incomingRefreshToken) as JwtPayload;
+			if (decodedToken?._id) {
+				await User.findByIdAndUpdate(decodedToken._id, {
+					$pull: { refreshToken: incomingRefreshToken },
+				}).exec();
+			}
+			throw new ApiError(401, 'Refresh token has expired');
+		}
 		throw new ApiError(
 			401,
 			(error as Error)?.message || 'Invalid Access Token'
@@ -284,7 +319,7 @@ export const updateUserAvatar = asyncHandler(async (req, res) => {
 	).select('-password -refreshToken');
 
 	const deletedResource = await deleteFromCloudinary(req.user.avatar);
-	
+
 	return res
 		.status(200)
 		.json(new ApiResponse(200, user, 'Avatar image updated successfully'));

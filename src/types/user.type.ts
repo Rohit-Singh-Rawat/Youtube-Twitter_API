@@ -8,6 +8,6 @@ export default interface UserType {
 	coverImage: string;
 	watchHistory: mongoose.Types.ObjectId[];
 	password: string;
-	refreshToken: string;
+	refreshToken: [string];
 	
 }

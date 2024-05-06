@@ -69,21 +69,12 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 	pipeline.push({ $match: { isPublished: true } });
 
-	if (sortBy && sortType) {
-		pipeline.push({
-			$sort: {
-				[sortBy]: sortType === SortType.ASC ? 1 : -1,
-			},
-		});
-	} else if (sortBy && !sortType) {
-		pipeline.push({
-			$sort: {
-				[sortBy]: 1,
-			},
-		});
-	} else {
-		pipeline.push({ $sort: { createdAt: -1 } });
-	}
+	pipeline.push({
+		$sort: {
+			[sortBy || SortBy.CREATED_AT]:
+				(sortType || SortType.ASC) === SortType.ASC ? 1 : -1,
+		},
+	});
 	pipeline.push(
 		{
 			$lookup: {

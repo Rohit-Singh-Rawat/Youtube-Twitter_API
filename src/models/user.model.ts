@@ -47,7 +47,7 @@ const userSchema: mongoose.Schema<UserDocument> = new mongoose.Schema(
 			minlength: 8,
 		},
 		refreshToken: {
-			type: String,
+			type: [String],
 		},
 	},
 	{
