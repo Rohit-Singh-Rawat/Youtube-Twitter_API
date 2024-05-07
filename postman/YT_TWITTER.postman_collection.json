@@ -2,6 +2,7 @@
 	"info": {
 		"_postman_id": "dd13832b-6b15-4a41-aff0-7e87e02d315a",
 		"name": "YT_TWITTER",
+		"description": "## Welcome to the API documentation for YT_TWITTER!\n\nThis collection provides detailed information about the endpoints and functionalities available for interacting with the YT_TWITTER application through its API.\n\n### Overview\n\nYT_Twitter serves as the backend infrastructure for a hybrid social media platform combining elements of YouTube and Twitter. It offers a robust set of APIs and services for managing user accounts, tweets, subscriptions, playlists, likes, health checks, dashboard statistics, and video comments. The backend is architected for deployment on various server platforms, facilitating seamless integration into frontend applications to deliver immersive social media experiences.\n\n### GitHub Repository\n\nYou can access the source code and project files on the GitHub repository:  \n[YouTube-Twitter API](https://github.com/Rohit-Singh-Rawat/Youtube-Twitter_API)\n\n### Endpoints and Functionality\n\n1. **User Management:**\n    - Register new users, manage profiles, log in/out, and refresh access tokens.\n    - **Endpoint:** `/user`\n2. **Video Management:**\n    \n    - Manage video resources including retrieval, deletion, update, publishing, and toggling publish status.\n    - **Endpoint:** `/video`\n        \n3. **Tweet Management:**\n    - Create, update, delete tweets, and retrieve tweets by user ID.\n    - **Endpoint:** `/tweet`\n4. **Subscription Management:**\n    - Subscribe/unsubscribe from channels, retrieve subscribed channels, and channel subscribers.\n    - **Endpoint:** `/subscriptions`\n5. **Playlist Management:**\n    - Create, update, delete playlists, add/remove videos, and retrieve user playlists.\n    - **Endpoint:** `/playlist`\n6. **Like Management:**\n    - Toggle likes on videos, comments, tweets, and retrieve liked videos by user.\n    - **Endpoint:** `/likes`\n7. **Health Check:**\n    \n    - Perform a health check to ensure the API is operational.\n    - **Endpoint:** `/healthCheck`\n        \n8. **Dashboard Statistics:**\n    - Retrieve channel statistics such as views and video uploads.\n    - **Endpoint:** `/dashboard`\n9. **Video Comment Management:**\n    - Add, update, delete comments on videos.\n    - **Endpoint:** `/comment`\n\nThis API collection empowers developers to build applications with features similar to YouTube and Twitter, enhancing user engagement and providing a seamless social media experience.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32629407"
 	},
@@ -452,7 +453,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "### User Management\n\nThe User Management endpoints handle user authentication, registration, profile updates, and user-related operations.\n\n**Base URL:** `/api/v1/user`\n\n1. **Register User**\n    - **Endpoint:** `/register`\n    - **Method:** POST\n    - **Description:** Register a new user.\n    - **Required:**\n        - Body Params:\n            - `username`: User's username.\n            - `fullName`: User's full name.\n            - `password`: User's password.\n            - `email`: User's email address.\n            - `avatar`: User's avatar image file.\n            - `coverImage`: User's cover image file.\n2. **Login User**\n    - **Endpoint:** `/login`\n    - **Method:** POST\n    - **Description:** Authenticate user and generate access and refresh tokens.\n    - **Required:**\n        - Body Params:\n            - `loginIdentity`: User's email or username.\n            - `password`: User's password.\n        - Header: Authentication token.\n3. **Logout User**\n    - **Endpoint:** `/logout`\n    - **Method:** POST\n    - **Description:** Log out the authenticated user.\n    - **Required:** Header: Authentication token.\n4. **Refresh Access Token**\n    - **Endpoint:** `/refresh-token`\n    - **Method:** POST\n    - **Description:** Refresh the access token using the refresh token.\n    - **Required:** Header: Authentication token.\n5. **Change Password**\n    - **Endpoint:** `/change-password`\n    - **Method:** POST\n    - **Description:** Change the user's password.\n    - **Required:**\n        - Body Params:\n            - `oldPassword`: User's old password.\n            - `newPassword`: User's new password.\n        - Header: Authentication token.\n6. **Get Current User**\n    - **Endpoint:** `/current-user`\n    - **Method:** GET\n    - **Description:** Retrieve the details of the authenticated user.\n    - **Required:** Header: Authentication token.\n7. **Update Account Details**\n    - **Endpoint:** `/update-user`\n    - **Method:** PATCH\n    - **Description:** Update the account details of the authenticated user.\n    - **Required:**\n        - Body Params:\n            - `fullName` (optional): User's full name.\n            - `email` (optional): User's email address.\n        - Header: Authentication token.\n8. **Update User Avatar**\n    - **Endpoint:** `/update-avatar`\n    - **Method:** PATCH\n    - **Description:** Update the avatar image of the authenticated user.\n    - **Required:**\n        - Body Params: `avatar`: User's new avatar image file.\n        - Header: Authentication token.\n9. **Update Cover Image**\n    - **Endpoint:** `/update-coverImg`\n    - **Method:** PATCH\n    - **Description:** Update the cover image of the authenticated user.\n    - **Required:**\n        - Body Params: `coverImage`: User's new cover image file.\n        - Header: Authentication token.\n10. **Get User Channel Profile**\n    - **Endpoint:** `/c/:username`\n    - **Method:** GET\n    - **Description:** Retrieve the profile details of a user's channel.\n    - **Required:** Path Param: User's username.\n11. **Get User Watch History**\n    - **Endpoint:** `/watch-history`\n    - **Method:** GET\n    - **Description:** Retrieve the watch history of the authenticated user.\n    - **Required:** Header: Authentication token.\n\nThese endpoints facilitate user authentication, registration, profile updates, and related operations within the application."
 		},
 		{
 			"name": "Video",
@@ -788,7 +790,821 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "### Video Management\n\nThe Video Management endpoints allow users to upload, retrieve, update, publish, delete, and toggle the publish status of videos.\n\n**Base URL:** `/api/v1/video`\n\n1. **Get All Videos**\n    \n    - **Endpoint:** `/`\n        \n    - **Method:** GET\n    - **Description:** Retrieve all videos.\n    - **Required:**\n        \n        - Query Params:\n            \n            - `page` (optional): Page number for pagination.\n            - `limit` (optional): Limit of videos per page.\n            - `query` (optional): Search query.\n            - `sortBy` (optional): Sort videos by views, createdAt, or duration.\n            - `sortType` (optional): Sort videos in ascending or descending order.\n            - `userId` (optional): Filter videos by user ID.\n                \n2. **Get Video by ID**\n    \n    - **Endpoint:** `/v/:videoId`\n        \n    - **Method:** GET\n    - **Description:** Retrieve a video by ID.\n    - **Required:**\n        - Path Param: Video ID.\n        - Header: Authentication token.\n3. **Update Video**\n    \n    - **Endpoint:** `/videos/v/:videoId`\n    - **Method:** PATCH\n    - **Description:** Update a video by ID.\n    - **Required:**\n        - Path Param: Video ID.\n        - Body Params:\n            - `title`: Title of the video.\n            - `description`: Description of the video.\n            - `thumbnail`: Thumbnail image.\n        - Header: Authentication token.\n4. **Delete Video**\n    \n    - **Endpoint:** `/v/:videoId`\n        \n    - **Method:** DELETE\n    - **Description:** Delete a video by ID.\n    - **Required:**\n        - Path Param: Video ID.\n        - Header: Authentication token.\n5. **Publish Video**\n    \n    - **Endpoint:** `/`\n        \n    - **Method:** POST\n    - **Description:** Publish a video.\n    - **Required:**\n        - Body Params:\n            - `title`: Title of the video.\n            - `description`: Description of the video.\n            - `videoFile`: Video file.\n            - `thumbnail`: Thumbnail image.\n        - Header: Authentication token.\n6. **Toggle Publish Status**\n    \n    - **Endpoint:** `/toggle/publish/:videoId`\n        \n    - **Method:** PATCH\n    - **Description:** Toggle the publish status of a video.\n    - **Required:**\n        - Path Param: Video ID.\n        - Header: Authentication token.\n\nThese endpoints facilitate the management of videos, including uploading, retrieving, updating, publishing, and deleting videos within the YT_TWITTER application."
+		},
+		{
+			"name": "Tweet",
+			"item": [
+				{
+					"name": "createTweet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "7aab8b2e-dd48-46d0-b581-75a53442fe0d"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "This is a new tweet2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/tweet/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweet",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserTweets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "30148963-cfde-4ad9-b041-8d4affca38e3"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/tweet/user/663a4638dbede2dcf6fc7d99",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweet",
+								"user",
+								"663a4638dbede2dcf6fc7d99"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTweet",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "2f82ae6b-660a-4cb7-9a47-41fa78f287ac"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Updated tweet content",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/tweet/663a637a1b0f3438e555dab9",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweet",
+								"663a637a1b0f3438e555dab9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTweet",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "7c927978-3387-493b-9a49-41cb38b6c042"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/tweet/663a637a1b0f3438e555dab9",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"tweet",
+								"663a637a1b0f3438e555dab9"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Tweet Management\n\nThe Tweet Management endpoints handle operations related to creating, retrieving, updating, and deleting tweets.\n\n**Base URL:** `/api/v1/tweet`\n\n1. **Create Tweet**\n    - **Endpoint:** `/`\n    - **Method:** POST\n    - **Description:** Create a new tweet.\n    - **Required:**\n        - Body Params:\n            - `content`: Content of the tweet.\n        - Header: Authentication token.\n2. **Get User Tweets**\n    - **Endpoint:** `/user/:userId`\n    - **Method:** GET\n    - **Description:** Retrieve tweets posted by a specific user.\n    - **Required:** Path Param: User's ID.\n3. **Update Tweet**\n    - **Endpoint:** `/:tweetId`\n    - **Method:** PATCH\n    - **Description:** Update an existing tweet.\n    - **Required:**\n        - Path Param: ID of the tweet to update.\n        - Body Params: `content`: Updated content of the tweet.\n        - Header: Authentication token.\n4. **Delete Tweet**\n    - **Endpoint:** `/:tweetId`\n    - **Method:** DELETE\n    - **Description:** Delete an existing tweet.\n    - **Required:** Path Param: ID of the tweet to delete.\n        - Header: Authentication token.\n\nThese endpoints enable users to perform operations such as creating, retrieving, updating, and deleting tweets within the application."
+		},
+		{
+			"name": "Subscription",
+			"item": [
+				{
+					"name": "getUserChannelSubscribers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "7e7a8c12-f8fc-44f0-ac7e-ccf339932cb8"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/subscriptions/c/663a4638dbede2dcf6fc7d99",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"c",
+								"663a4638dbede2dcf6fc7d99"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleSubscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "d1a3042e-81f7-4431-9de3-6a06703705f7"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/subscriptions/c/663a4638dbede2dcf6fc7d99",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"c",
+								"663a4638dbede2dcf6fc7d99"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSubscribedChannels",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "c94960d8-84b2-40e9-9369-5346775de881"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/subscriptions/u/663a4638dbede2dcf6fc7d99",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"u",
+								"663a4638dbede2dcf6fc7d99"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Subscription Management\n\nThe Subscription Management endpoints handle operations related to subscribing to channels, fetching subscribers of a channel, and fetching channels subscribed to by a user.\n\n**Base URL:** `/api/v1/subscriptions`\n\n1. **Toggle Subscription**\n    \n    - **Endpoint:** `/c/:channelId`\n        \n    - **Method:** POST\n        \n    - **Description:** Subscribe or unsubscribe from a channel.\n        \n    - **Required:**\n        \n        - Path Param: Channel ID.\n            \n        - Header: Authentication token.\n            \n2. **Get User Channel Subscribers**\n    \n    - **Endpoint:** `/c/:channelId`\n        \n    - **Method:** GET\n        \n    - **Description:** Retrieve subscribers of a specific channel.\n        \n    - **Required:** Path Param: Channel ID.\n        \n        - Header: Authentication token.\n            \n3. **Get Subscribed Channels**\n    \n    - **Endpoint:** `/u/:subscriberId`\n        \n    - **Method:** GET\n        \n    - **Description:** Retrieve channels subscribed to by a specific user.\n        \n    - **Required:** Path Param: User ID.\n        \n        - Header: Authentication token.\n            \n\nThese endpoints enable users to subscribe to channels, retrieve subscribers of a channel, and retrieve channels subscribed to by a user."
+		},
+		{
+			"name": "Playlist",
+			"item": [
+				{
+					"name": "createPlaylist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "9b1c88db-4a4a-40b0-af3f-53c6373825a5"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "tisaplaylist2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPlaylistById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "fbcc8538-9c99-478c-b456-f035bbf20b18"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist/663a678686d75738136f6ad1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist",
+								"663a678686d75738136f6ad1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePlaylist",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "3e3a0f3e-0492-4e7d-b655-c439d649d7bd"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "tisaplaylist2updated",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist/663a679986d75738136f6ad4",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist",
+								"663a679986d75738136f6ad4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePlaylist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "e14dccda-6861-408b-b1a6-0b1c697ccf7f"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist/663a678686d75738136f6ad1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist",
+								"663a678686d75738136f6ad1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addVideoToPlaylist",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "d8d9096f-0682-40c8-bc2c-65a26ec2a576"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist/add/663a543c38e8b0a270e4db41/663a678686d75738136f6ad1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist",
+								"add",
+								"663a543c38e8b0a270e4db41",
+								"663a678686d75738136f6ad1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeVideoFromPlaylist",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "cbc7ff00-4598-4a0c-a11f-abc296a3266b"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist/remove/663a543c38e8b0a270e4db41/663a678686d75738136f6ad1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist",
+								"remove",
+								"663a543c38e8b0a270e4db41",
+								"663a678686d75738136f6ad1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserPlaylists",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "7fafacbd-5ca7-4f84-b5b4-0356bf7e9176"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/playlist/user/663a4638dbede2dcf6fc7d99",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"playlist",
+								"user",
+								"663a4638dbede2dcf6fc7d99"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Playlist Management\n\nThe Playlist Management endpoints facilitate operations related to creating, updating, deleting playlists, adding and removing videos from playlists, and fetching playlists of a user.\n\n**Base URL:** `/api/v1/playlist`\n\n1. **Create Playlist**\n    - **Endpoint:** `/`\n    - **Method:** POST\n    - **Description:** Create a new playlist.\n    - **Required:**\n        - Body: Playlist name (required), Playlist description (optional).\n        - Header: Authentication token.\n2. **Get User Playlists**\n    - **Endpoint:** `/user/:userId`\n    - **Method:** GET\n    - **Description:** Retrieve playlists of a specific user.\n    - **Required:** Path Param: User ID.\n        - Header: Authentication token.\n3. **Get Playlist by ID**\n    - **Endpoint:** `/:playlistId`\n    - **Method:** GET\n    - **Description:** Retrieve a playlist by its ID.\n    - **Required:** Path Param: Playlist ID.\n        - Header: Authentication token.\n4. **Add Video to Playlist**\n    - **Endpoint:** `/add/:videoId/:playlistId`\n    - **Method:** PATCH\n    - **Description:** Add a video to a playlist.\n    - **Required:** Path Param: Video ID, Playlist ID.\n        - Header: Authentication token.\n5. **Remove Video from Playlist**\n    - **Endpoint:** `/remove/:videoId/:playlistId`\n    - **Method:** PATCH\n    - **Description:** Remove a video from a playlist.\n    - **Required:** Path Param: Video ID, Playlist ID.\n        - Header: Authentication token.\n6. **Update Playlist**\n    - **Endpoint:** `/:playlistId`\n    - **Method:** PATCH\n    - **Description:** Update a playlist's name or description.\n    - **Required:** Path Param: Playlist ID.\n        - Body: Playlist name (optional), Playlist description (optional).\n        - Header: Authentication token.\n7. **Delete Playlist**\n    - **Endpoint:** `/:playlistId`\n    - **Method:** DELETE\n    - **Description:** Delete a playlist.\n    - **Required:** Path Param: Playlist ID.\n        - Header: Authentication token.\n\nThese endpoints empower users to manage their playlists, including creating, updating, and deleting playlists, as well as adding and removing videos from playlists."
+		},
+		{
+			"name": "Like",
+			"item": [
+				{
+					"name": "toggleVideoLike",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "7e600a9a-2b2d-4840-99e6-e52482621173"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/likes/toggle/v/663a69990bc0c92f8ce09733",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"toggle",
+								"v",
+								"663a69990bc0c92f8ce09733"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleCommentLike",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "e78e5aa1-4f74-4955-b258-66de752c537a"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/likes/toggle/c/663a6ed5c3a9b21f4b6a5473",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"toggle",
+								"c",
+								"663a6ed5c3a9b21f4b6a5473"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "toggleTweetLike",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "c920efcb-f80b-42da-b612-b1791fa82cca"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/likes/toggle/t/663a637f1b0f3438e555dabc",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"toggle",
+								"t",
+								"663a637f1b0f3438e555dabc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getLikedVideos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "40ecb628-10aa-4b28-81ec-169902298bb7"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/likes/videos",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"likes",
+								"videos"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Like Management\n\nThe Like Management endpoints enable users to like and unlike videos, comments, and tweets, as well as retrieve a list of videos they have liked.\n\n**Base URL:** `/api/v1/likes`\n\n1. **Toggle Video Like**\n    \n    - **Endpoint:** `/toggle/v/:videoId`\n        \n    - **Method:** POST\n        \n    - **Description:** Like or unlike a video.\n        \n    - **Required:** Path Param: Video ID.\n        \n        - Header: Authentication token.\n            \n2. **Toggle Comment Like**\n    \n    - **Endpoint:** `/toggle/c/:commentId`\n        \n    - **Method:** POST\n        \n    - **Description:** Like or unlike a comment.\n        \n    - **Required:** Path Param: Comment ID.\n        \n        - Header: Authentication token.\n            \n3. **Toggle Tweet Like**\n    \n    - **Endpoint:** `/toggle/t/:tweetId`\n        \n    - **Method:** POST\n        \n    - **Description:** Like or unlike a tweet.\n        \n    - **Required:** Path Param: Tweet ID.\n        \n        - Header: Authentication token.\n            \n4. **Get Liked Videos**\n    \n    - **Endpoint:** `/videos`\n        \n    - **Method:** GET\n        \n    - **Description:** Retrieve a list of videos liked by the authenticated user.\n        \n    - **Required:**\n        \n        - Header: Authentication token.\n            \n\nThese endpoints allow users to interact with content by liking or unliking videos, comments, and tweets. Additionally, users can view a list of videos they have liked."
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "healthCheck",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "19094867-f7f1-476d-926c-0138a29c9008"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/healthCheck/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"healthCheck",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Health Check\n\nThe Health Check endpoint is used to verify the health status of the application.\n\n**Base URL:** `/api/v1/healthCheck`\n\n1. **Health Check**\n    - **Endpoint:** `/`\n    - **Method:** GET\n    - **Description:** Verify the health status of the application.\n    - **Response:** Returns a status of `200 OK` if the application is running properly."
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "getChannelStats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "2632fbf6-1c63-4b3b-b8d5-fd9deab59e1a"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/dashboard/stats",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"dashboard",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getChannelVideos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "9ab60b8f-e5b9-4b96-ab71-3926bcf33b8d"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/dashboard/videos",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"dashboard",
+								"videos"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Channel Dashboard\n\nThe Channel Dashboard endpoints provide information and statistics about the user's channel, including video statistics and channel metrics.\n\n**Base URL:** `/api/v1/dashboard`\n\n1. **Get Channel Statistics**\n    \n    - **Endpoint:** `/stats`\n        \n    - **Method:** GET\n        \n    - **Description:** Retrieve statistics and metrics for the authenticated user's channel.\n        \n    - **Required:**\n        \n        - Header: Authentication token.\n            \n    - **Response:** Returns channel statistics including total views, total likes, total videos, and total subscribers.\n        \n2. **Get Channel Videos**\n    \n    - **Endpoint:** `/videos`\n        \n    - **Method:** GET\n        \n    - **Description:** Retrieve videos uploaded by the authenticated user.\n        \n    - **Required:**\n        \n        - Header: Authentication token.\n            \n    - **Response:** Returns a list of videos uploaded by the user including video details such as ID, title, description, likes, comments, etc.\n        \n\nThese endpoints allow users to access and manage their channel statistics and videos, providing insights into their channel's performance."
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "getVideoComments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "e4587912-cca2-45d0-aaca-9ea54aa97c6b"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/comment/663a69990bc0c92f8ce09733",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comment",
+								"663a69990bc0c92f8ce09733"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addComment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "b0a1a4bd-da46-4cbc-a912-003e64a1baef"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "raOne",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/comment/663a69990bc0c92f8ce09733",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comment",
+								"663a69990bc0c92f8ce09733"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteComment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "8148a460-d252-459b-bf2a-7b35f2fbe3c0"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/api/v1/comment/c/663a6ee4c3a9b21f4b6a5477",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comment",
+								"c",
+								"663a6ee4c3a9b21f4b6a5477"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateComment",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "8f27c1cb-4053-4b5f-aa1d-0a8fdfbe8b05"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "RaOne is back!!!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/comment/c/663a6ee4c3a9b21f4b6a5477",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"comment",
+								"c",
+								"663a6ee4c3a9b21f4b6a5477"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "### Video Comments\n\nThe Video Comments endpoints allow users to interact with comments on videos.\n\n**Base URL:** `/api/v1/comment`\n\n1. **Get Video Comments**\n    - **Endpoint:** `/:videoId`\n    - **Method:** GET\n    - **Description:** Retrieve comments for a specific video.\n    - **Required:**\n        - Header: Authentication token.\n        - Parameters: `videoId` - ID of the video.\n    - **Query Parameters:**\n        - `page` (optional): Page number for pagination (default: 1).\n        - `limit` (optional): Number of comments per page (default: 20).\n    - **Response:** Returns paginated comments for the specified video.\n2. **Add Comment**\n    - **Endpoint:** `/:videoId`\n    - **Method:** POST\n    - **Description:** Add a new comment to a video.\n    - **Required:**\n        - Header: Authentication token.\n        - Parameters: `videoId` - ID of the video.\n        - Body: Content of the comment.\n    - **Response:** Returns the newly added comment.\n3. **Update Comment**\n    - **Endpoint:** `/c/:commentId`\n    - **Method:** PATCH\n    - **Description:** Update an existing comment.\n    - **Required:**\n        - Header: Authentication token.\n        - Parameters: `commentId` - ID of the comment.\n        - Body: New content of the comment.\n    - **Response:** Returns the updated comment.\n4. **Delete Comment**\n    - **Endpoint:** `/c/:commentId`\n    - **Method:** DELETE\n    - **Description:** Delete a comment.\n    - **Required:**\n        - Header: Authentication token.\n        - Parameters: `commentId` - ID of the comment.\n    - **Response:** Returns a success message indicating that the comment has been deleted.\n\nThese endpoints provide functionalities to manage comments on videos, including retrieval, creation, updating, and deletion."
 		}
 	],
 	"event": [
@@ -816,12 +1632,12 @@
 	"variable": [
 		{
 			"key": "dummyaccessToken",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNhNDYzOGRiZWRlMmRjZjZmYzdkOTkiLCJlbWFpbCI6ImR1bW15QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiY2hheWFfYm9kZSIsImZ1bGxOYW1lIjoiQmVuamFtaW4gWmllbWUiLCJpYXQiOjE3MTUwOTkyMjgsImV4cCI6MTcxNTEwMjgyOH0.0q60EHoa-wHihmRQMQG4jyjkcmJCrXCYdgCbcydxWqI",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNhNDYzOGRiZWRlMmRjZjZmYzdkOTkiLCJlbWFpbCI6ImR1bW15QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiY2hheWFfYm9kZSIsImZ1bGxOYW1lIjoiQmVuamFtaW4gWmllbWUiLCJpYXQiOjE3MTUxMDMyMzgsImV4cCI6MTcxNTEzOTIzOH0.iSzf1VzHO5sR_AT5fwXLBzvZUQxWv7ocPCWJrd4XB3g",
 			"type": "string"
 		},
 		{
 			"key": "dummyrefershToken",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNhNDYzOGRiZWRlMmRjZjZmYzdkOTkiLCJpYXQiOjE3MTUwOTkyMjgsImV4cCI6MTcxNTk2MzIyOH0.HegMMef6tPLsTHRkXAEpcq0zN56FiFMYB1_ln2nm8rA",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNhNDYzOGRiZWRlMmRjZjZmYzdkOTkiLCJpYXQiOjE3MTUxMDMyMzgsImV4cCI6MTcxNTk2NzIzOH0.JP99WMRicKGSNf7CnlYy_WyLhuh34izNq9oQkFa_DAw",
 			"type": "string"
 		}
 	]
