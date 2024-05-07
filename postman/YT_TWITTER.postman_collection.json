@@ -205,8 +205,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{dummyaccessToken}}",
-								"type": "text",
-								"uuid": "38e2eae0-6c8f-46be-a5f4-b8b7502ccb0a"
+								"uuid": "de099569-8725-40e1-8243-9d1b9c9d590d"
 							}
 						],
 						"body": {
@@ -243,7 +242,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{dummyaccessToken}}",
-								"uuid": "4ac450a3-7b13-4e58-bb59-2bf76d137ab3"
+								"uuid": "1d63e8d7-2e80-41c2-a34e-bb3d4ee4b726"
 							}
 						],
 						"body": {
@@ -285,7 +284,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{dummyaccessToken}}",
-								"uuid": "3056e0d4-1014-4d69-a5f1-c104d90d27dd"
+								"uuid": "d490912b-074c-4bcd-a068-9bc083772a8a"
 							}
 						],
 						"body": {
@@ -299,7 +298,7 @@
 								{
 									"key": "avatar",
 									"type": "file",
-									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/twitter.svg"
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/jeremy-thomas-rMmibFe4czY-unsplash.jpg"
 								}
 							]
 						},
@@ -327,7 +326,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{dummyaccessToken}}",
-								"uuid": "28144460-dc12-459c-b082-221fd627afab"
+								"uuid": "5004a12c-8c95-4699-9c4f-0a5cb1e10b42"
 							}
 						],
 						"body": {
@@ -341,7 +340,7 @@
 								{
 									"key": "coverImage",
 									"type": "file",
-									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/twitter.svg"
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/business-tasklist.svg"
 								}
 							]
 						},
@@ -372,7 +371,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{dummyaccessToken}}",
-								"uuid": "83d4b543-94c9-4546-8d13-a86829c18e13"
+								"uuid": "56b1dc33-b608-4181-bb1c-fd1e8f89d4e5"
 							}
 						],
 						"body": {
@@ -419,7 +418,7 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{dummyaccessToken}}",
-								"uuid": "346f2130-b44e-44fd-a9e6-bb5f78c133e4"
+								"uuid": "6deb40b1-ed96-4ba3-94ad-4565408f61de"
 							}
 						],
 						"body": {
@@ -454,6 +453,342 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Video",
+			"item": [
+				{
+					"name": "getAllVideos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "026b40d5-b214-40a6-a03a-3b9f20147894"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dummy@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/video/?query=video1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"video",
+								""
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "video1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getVideoById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "98097719-81fa-4a42-938b-fc1c46de8578"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "dummy@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/video/v/663a51b0c67240cb2dbfe92d",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"video",
+								"v",
+								"663a51b0c67240cb2dbfe92d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publishVideo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "3de72749-c1b1-498c-83cb-ad34cae31337"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "pokemon",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "it's pikachu",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/pokedex - Made with Clipchamp.mp4"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/jeremy-thomas-rMmibFe4czY-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/video/",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"video",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateVideo",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "aea213f8-96e5-498d-8112-351a1d7bbe30"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "pokemon",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "it's pikachu",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/pokedex - Made with Clipchamp.mp4",
+									"disabled": true
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/pokemon.svg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/video/v/663a51dec67240cb2dbfe931",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"video",
+								"v",
+								"663a51dec67240cb2dbfe931"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteVideo",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "e07b7a0e-1fcf-465e-932f-922a2a980e29"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "pokemon",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "it's pikachu",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/pokedex - Made with Clipchamp.mp4",
+									"disabled": true
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/pokemon.svg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/video/v/663a5ec08b6c2f8ce4be4e54",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"video",
+								"v",
+								"663a5ec08b6c2f8ce4be4e54"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "togglePublish",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dummyaccessToken}}",
+								"uuid": "82657e26-6b1d-4792-bef9-2a23129506bb"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "refreshToken",
+									"value": "{{dummyrefershToken}}",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "pokemon",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "it's pikachu",
+									"type": "text"
+								},
+								{
+									"key": "videoFile",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/pokedex - Made with Clipchamp.mp4"
+								},
+								{
+									"key": "thumbnail",
+									"type": "file",
+									"src": "/C:/Users/ROHIT SINGH RAWAT/Downloads/jeremy-thomas-rMmibFe4czY-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/v1/video/toggle/publish/663a51b0c67240cb2dbfe92d",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"video",
+								"toggle",
+								"publish",
+								"663a51b0c67240cb2dbfe92d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -481,12 +816,12 @@
 	"variable": [
 		{
 			"key": "dummyaccessToken",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjM5MzU3MDlkMWJiNTE5NDEwMzAzYzUiLCJlbWFpbCI6InRhYml0aGEuc3BvcmVyQGhvdG1haWwuY29tIiwidXNlcm5hbWUiOiJicmFkX2hpbHBlcnQzOSIsImZ1bGxOYW1lIjoiQ2hhcmxpZSBIaW50eiIsImlhdCI6MTcxNTAyNjY1MiwiZXhwIjoxNzE1MDMwMjUyfQ.0f2-jFEQYeg4bn3TGquubAYr07dM5aLCJPfG1MgPj1U",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNhNDYzOGRiZWRlMmRjZjZmYzdkOTkiLCJlbWFpbCI6ImR1bW15QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiY2hheWFfYm9kZSIsImZ1bGxOYW1lIjoiQmVuamFtaW4gWmllbWUiLCJpYXQiOjE3MTUwOTkyMjgsImV4cCI6MTcxNTEwMjgyOH0.0q60EHoa-wHihmRQMQG4jyjkcmJCrXCYdgCbcydxWqI",
 			"type": "string"
 		},
 		{
 			"key": "dummyrefershToken",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjM5MzU3MDlkMWJiNTE5NDEwMzAzYzUiLCJpYXQiOjE3MTUwMjY2NTIsImV4cCI6MTcxNTg5MDY1Mn0.TBTOd5mLPvXMkd8k4fWNDkvwbwn_j8G5fSdQ5LUXy0U",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjNhNDYzOGRiZWRlMmRjZjZmYzdkOTkiLCJpYXQiOjE3MTUwOTkyMjgsImV4cCI6MTcxNTk2MzIyOH0.HegMMef6tPLsTHRkXAEpcq0zN56FiFMYB1_ln2nm8rA",
 			"type": "string"
 		}
 	]

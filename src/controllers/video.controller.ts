@@ -7,8 +7,12 @@ import Comment from '../models/comment.model';
 import ApiResponse from '../utils/APIResponse';
 import User from '../models/user.model';
 import { deleteFromCloudinary, uploadOnCloudinary } from '../utils/cloudinary';
-import { UpdateVideoSchema } from '../schemas/video.schemas';
+import {
+	PublishVideoSchema,
+	UpdateVideoSchema,
+} from '../schemas/video.schemas';
 import { v2 as cloudinary } from 'cloudinary';
+import zod from 'zod';
 
 enum SortBy {
 	VIEWS = 'views',
@@ -42,6 +46,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 	const pipeline: PipelineStage[] = [];
 
 	if (query) {
+		
 		pipeline.push({
 			$match: {
 				$text: {
@@ -112,12 +117,18 @@ const getAllVideos = asyncHandler(async (req, res) => {
 });
 
 const publishAVideo = asyncHandler(async (req, res) => {
-	const { title, description } = req.body;
+	const { videoId } = req.params;
+	const { success } = PublishVideoSchema.safeParse(req.body);
+	if (!success) {
+		throw new ApiError(400, 'Valid content is required');
+	}
+	const { description, title }: zod.infer<typeof PublishVideoSchema> = req.body;
+
 	const files = req.files as {
 		[fieldname: string]: Express.Multer.File[];
 	};
-	const videoFileLocalPath = files?.videoFile[0].path;
-	const thumbnailLocalPath = files?.thumbnail[0].path;
+	const videoFileLocalPath = files?.videoFile?.[0].path;
+	const thumbnailLocalPath = files?.thumbnail?.[0].path;
 
 	if (!videoFileLocalPath) {
 		throw new ApiError(400, 'videoFileLocalPath is required');
@@ -287,6 +298,9 @@ const getVideoById = asyncHandler(async (req, res) => {
 const updateVideo = asyncHandler(async (req, res) => {
 	const { videoId } = req.params;
 	const { success } = UpdateVideoSchema.safeParse(req.body);
+	if (!success) {
+		throw new ApiError(400, 'Valid content is required');
+	}
 	const { description, title }: Pick<VideoDocument, 'description' | 'title'> =
 		req.body;
 
@@ -335,7 +349,7 @@ const updateVideo = asyncHandler(async (req, res) => {
 
 	return res
 		.status(200)
-		.json(new ApiResponse(200, updateVideo, 'video updated successful ly'));
+		.json(new ApiResponse(200, updateVideo, 'video updated successfully'));
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
@@ -362,9 +376,9 @@ const deleteVideo = asyncHandler(async (req, res) => {
 		throw new ApiError(500, 'Error while deleting video!!! pls try again');
 	}
 
-	await deleteFromCloudinary(deletedVideo?.videoFile);
-	await deleteFromCloudinary(deletedVideo.thumbnail);
-
+	const r = await deleteFromCloudinary(deletedVideo?.videoFile);
+	const s = await deleteFromCloudinary(deletedVideo.thumbnail);
+	
 	await Like.deleteMany({
 		video: videoId,
 	});

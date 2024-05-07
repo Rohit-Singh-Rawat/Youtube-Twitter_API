@@ -15,7 +15,7 @@ const uploadOnCloudinary = async (localFilePath: string) => {
 		const response = await cloudinary.uploader.upload(localFilePath, {
 			resource_type: 'auto',
 		});
-		console.log('file is uploaded on Cloudinary');
+		// console.log('file is uploaded on Cloudinary');
 		fs.unlinkSync(localFilePath);
 		return response;
 	} catch (error) {
@@ -29,7 +29,16 @@ const deleteFromCloudinary = async (publicUrl: string) => {
 		if (!publicUrl) return null;
 
 		const publicId = extractPublicId(publicUrl);
-		const response = await cloudinary.uploader.destroy(publicId);
+		let response;
+
+		if (publicUrl.match(/\.(mp4|avi|mov|wmv|mkv|flv)$/)) {
+			response = await cloudinary.uploader.destroy(publicId, {
+				resource_type: 'video',
+			});
+		} else {
+			response = await cloudinary.uploader.destroy(publicId);
+		}
+
 		return response;
 	} catch (error) {
 		throw new ApiError(400, 'Error while deleting resource from cloudinary');
