@@ -12,4 +12,5 @@ export const UpdatePlaylistSchema = zod
 		if (data.name === undefined && data.description === undefined) {
 			return false;
 		}
+		return true
 	});

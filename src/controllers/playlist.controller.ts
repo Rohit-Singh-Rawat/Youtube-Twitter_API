@@ -253,8 +253,11 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 	) {
 		throw new ApiError(404, 'video is private');
 	}
+	if (playlist.videos.includes(video._id)) {
+		throw new ApiError(404, 'Video already exist in playlist');
+	}
 	if (playlist.owner?.toString() !== req.user?._id.toString()) {
-		throw new ApiError(404, 'only owner can remove video from their playlist');
+		throw new ApiError(404, 'only owner can add video from their playlist');
 	}
 
 	const updatedPlaylist = await Playlist.findByIdAndUpdate(
@@ -309,7 +312,7 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
 		throw new ApiError(404, 'only owner can remove video from their playlist');
 	}
 
-	if (!playlist.videos.find(video._id)) {
+	if (!playlist.videos.includes(video._id)) {
 		throw new ApiError(404, 'Video does not exist in playlist');
 	}
 
