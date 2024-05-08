@@ -15,7 +15,7 @@ YT_TWITTER API serves as the backend infrastructure for a hybrid social media pl
 ### (Things I Learned)
 - Refresh Token- (how they are different from access token, refresh token rotation, reuse detection)
 - Modular and scalable backend architecture in Typescript.
-- Multer and Cloudinary (learned how about multer, cloudinary. Installed 'cloudinary-build-url' to get public_Id.
+- Multer and Cloudinary (learned how about multer, cloudinary. Installed 'cloudinary-build-url' to get public_Id.)
 - Aggregate Pipelines (how they are different from query and populate)
 - pagination
 - Indexing (how indexing helps in fast searches while read but effect write speed)
@@ -23,10 +23,12 @@ YT_TWITTER API serves as the backend infrastructure for a hybrid social media pl
 
 ## Features
 
-- User account management.
-- Tweeting top search results from YouTube.
-- Customizable search queries and result limits.
-- Integration with YouTube Data API and Twitter API.
+- **User Management**: Users can sign up, log in, and manage their profiles.
+- **Content Creation**: Users can create and publish tweets, comments, likes, and videos.
+- **Content Organization**: Users can organize content into playlists.
+- **Content Discovery**: Users can discover new content through search, trending topics, and recommendations.
+- **User Interaction**: Users can interact with each other through commenting, liking, and sharing.
+
 
   
 ## Tech Stack
