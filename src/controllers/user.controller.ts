@@ -254,7 +254,7 @@ export const changeCurrentPassword = asyncHandler(async (req, res) => {
 	}
 	const user = (await User.findById(req.user._id)) as UserDocument;
 
-	const validatePassword = user?.comparePassword(req.body.oldPassword);
+	const validatePassword = await user?.comparePassword(req.body.oldPassword);
 	if (!validatePassword) {
 		throw new ApiError(401, 'Invalid old password');
 	}
